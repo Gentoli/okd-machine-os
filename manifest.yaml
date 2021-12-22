@@ -14,11 +14,11 @@ ref: fedora/${basearch}/coreos/okd
 repos:
   - fedora
   - fedora-updates
+  - fedora-modular
+  - fedora-updates-modular
   - updates-archive
   - fedora-coreos-pool
   - copr:copr.fedorainfracloud.org:networkmanager:NetworkManager-1.32
-  - crio
-  - cri-tools
   - okd-rpms
 
 packages:
@@ -32,6 +32,13 @@ packages:
   - fedora-repos-archive
   # User metrics
   - fedora-coreos-pinger
+
+modules:
+  enable:
+    - cri-o:1.22
+  install:
+    # cri-o and cri-tools
+    - cri-o:1.22/default
 
 # We include hours/minutes to avoid version number reuse
 automatic-version-prefix: "410.34.<date:%Y%m%d%H%M>"

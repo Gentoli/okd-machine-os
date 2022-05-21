@@ -3,7 +3,5 @@ FROM registry.ci.openshift.org/origin/4.11:artifacts as artifacts
 
 FROM quay.io/coreos-assembler/coreos-assembler:latest
 
-COPY --from=mcd /usr/bin/machine-config-daemon /files/overlay.d/99okd/usr/libexec/machine-config-daemon
-COPY --from=artifacts /srv/repo/*.rpm /files/okd-repo/
-
-ENTRYPOINT ["/noentry"]
+COPY --from=mcd /usr/bin/machine-config-daemon /resources/src/overlay.d/99okd/usr/libexec/machine-config-daemon
+COPY --from=artifacts /srv/repo/*.rpm /resources/srv/okd-repo/

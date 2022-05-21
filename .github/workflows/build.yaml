@@ -14,14 +14,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - shell: bash
-        run: rsync -r /files/* .
+        run: |
+          rsync -rv /resources/src .
 
       - shell: bash
         working-directory: /srv
         run: |
           set -exuo pipefail
           export COSA_SKIP_OVERLAY=1
-          
+
+          rsync -rv /resources/srv .
+
           cosa init $GITHUB_WORKSPACE --force
 
           # Create repo for OKD RPMs

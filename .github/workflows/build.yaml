@@ -14,12 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - shell: bash
-        run: |
-          mkdir -p ./overlay.d/99okd/usr/libexec
-          cp /usr/bin/machine-config-daemon ./overlay.d/99okd/usr/libexec/machine-config-daemon
-          
-          mkdir -p ./repo
-          cp -r /files/okd-repo ./repo
+        run: rsync -r /files/* .
 
       - shell: bash
         working-directory: /srv

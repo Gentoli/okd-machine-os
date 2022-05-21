@@ -5,6 +5,10 @@ on:
   # tmp
   push: { }
 
+permissions:
+  contents: 'read'
+  id-token: 'write'
+
 jobs:
   prepare:
     runs-on:

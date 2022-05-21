@@ -13,21 +13,22 @@ jobs:
       image: us.gcr.io/gen-pub/okd-coreos-assembler:latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          path: /src
       - shell: bash
+        run: |
+          mkdir -p ./overlay.d/99okd/usr/libexec
+          cp /usr/bin/machine-config-daemon ./overlay.d/99okd/usr/libexec/machine-config-daemon
+          
+          mkdir -p ./repo
+          cp -r /files/okd-repo ./repo
+
+      - shell: bash
+        working-directory: /srv
         run: |
           set -exuo pipefail
           export COSA_SKIP_OVERLAY=1
           
-          mkdir -p /src/overlay.d/99okd/usr/libexec
-          cp /usr/bin/machine-config-daemon /src/overlay.d/99okd/usr/libexec/machine-config-daemon
-          
-          mkdir -p /srv/repo
-          cp -r /files/okd-repo /srv/repo
-          
-          cosa init /src --force
-          
+          cosa init $GITHUB_WORKSPACE --force
+
           # Create repo for OKD RPMs
           pushd /srv/okd-repo
             createrepo_c .

@@ -1,6 +1,6 @@
 on:
   schedule:
-    - '1 6 * * SUN'
+    - cron: '1 6 * * SUN'
   workflow_dispatch: { }
 
 jobs:

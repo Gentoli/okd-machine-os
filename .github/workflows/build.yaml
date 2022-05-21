@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v3
       - shell: bash
         run: |
-          rsync -rv /resources/src .
+          rsync -rv /resources/src/* .
 
       - shell: bash
         working-directory: /srv
@@ -23,7 +23,7 @@ jobs:
           set -exuo pipefail
           export COSA_SKIP_OVERLAY=1
 
-          rsync -rv /resources/srv .
+          rsync -rv /resources/srv/* .
 
           cosa init $GITHUB_WORKSPACE --force
 

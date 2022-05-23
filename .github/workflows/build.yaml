@@ -67,4 +67,8 @@ jobs:
         working-directory: /srv
         run: |
           cosa upload-oscontainer --name "us.gcr.io/gen-pub/okd-os" --add-directory /overlay
-        
+
+      - name: Wait of fail
+        on: fail()
+        sehll: bash
+        run: sleep infinity

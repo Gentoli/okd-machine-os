@@ -39,7 +39,10 @@ jobs:
       - name: Login GCR
         run: |
           gcloud auth configure-docker
-          which docker-credential-gcloud
+
+          # create link for cosa sudo
+          cp -r ~/.config /root
+          ln -s "$(which docker-credential-gcloud)" /usr/local/bin/
 
       - shell: bash
         run: |

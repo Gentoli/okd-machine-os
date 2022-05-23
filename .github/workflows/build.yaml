@@ -11,8 +11,10 @@ jobs:
       - self-hosted
     container:
       image: us.gcr.io/gen-pub/okd-coreos-assembler:latest
+      # privileged for kvm, running as root for setup-gcloud
       options: >-
         --privileged
+        -u root
     steps:
       - uses: actions/checkout@v3
         with:
@@ -23,6 +25,12 @@ jobs:
         with:
           workload_identity_provider: "projects/649394681476/locations/global/workloadIdentityPools/github/providers/oidc"
           service_account: okd-machine-os@gentoli.iam.gserviceaccount.com
+
+      - name: chown repo
+        if: ${{ failure() }}
+        shell: bash
+        run: chown root:root $GITHUB_WORKSPACE
+
       - uses: actions/setup-node@v3
         with:
           node-version: 14

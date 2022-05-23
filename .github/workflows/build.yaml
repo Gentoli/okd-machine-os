@@ -35,10 +35,13 @@ jobs:
           node-version: 14
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v0'
+        with:
+          install_components: 'install_components'
 
       - name: Login GCR
         run: |
           gcloud auth configure-docker
+          which docker-credential-gcloud
 
       - shell: bash
         run: |

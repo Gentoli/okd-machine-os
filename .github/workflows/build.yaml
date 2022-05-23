@@ -70,5 +70,5 @@ jobs:
 
       - name: Wait of fail
         if: fail()
-        sehll: bash
+        shell: bash
         run: sleep infinity

@@ -2,8 +2,11 @@ on:
   schedule:
     - cron: '1 6 * * SUN'
   workflow_dispatch: { }
-  # tmp
-  push: { }
+  push:
+    # replace
+    branches: gh-actions
+    paths:
+      - '.github/workflows/okd-coreos-assembler.yaml'
 
 permissions:
   contents: 'read'

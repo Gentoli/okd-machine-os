@@ -11,7 +11,7 @@ jobs:
       - self-hosted
     container:
       image: us.gcr.io/gen-pub/okd-coreos-assembler:latest
-      options: |
+      options: >-
         --privileged
     steps:
       - uses: actions/checkout@v3

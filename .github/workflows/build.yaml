@@ -12,6 +12,6 @@ jobs:
     container:
       image: us.gcr.io/gen-pub/okd-coreos-assembler:latest
     steps:
-      - name: Yesss
+      - name: Yesss2
         shell: bash
-        run: echo Yesss
+        run: echo Yesss2

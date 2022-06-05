@@ -13,11 +13,11 @@ jobs:
       - self-hosted
     container:
       image: default-route-openshift-image-registry.apps.ocp.nsyd.tech/github-runners/okd-coreos-assembler:latest
-      # privileged for kvm, expose runner's docker login
+      # privileged for kvm, expose runner's docker creds to podman, running as root for fsetxattr(security.selinux
       options: >-
         --privileged
-        -v /home/runner/.docker:/root/.docker
-      # running as root for setup-gcloud: -u root
+        -v /home/runner/.docker/config.json:/run/containers/0/auth.json
+        -u root
     steps:
       - uses: actions/checkout@v3
         with:

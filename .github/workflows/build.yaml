@@ -1,3 +1,5 @@
+name: Build Machine Image
+
 on:
   push: {}
 

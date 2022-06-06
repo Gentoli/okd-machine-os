@@ -1,4 +1,6 @@
-FROM INITIAL_IMAGE as oscontainer
+ARG INITIAL_IMAGE
+FROM $INITIAL_IMAGE as oscontainer
+
 FROM scratch
 COPY --from=oscontainer /srv/ /srv/
 COPY --from=oscontainer /extensions/ /extensions/

@@ -3,9 +3,9 @@ name: Build Machine Image
 on:
   push: {}
 
-permissions:
-  contents: 'read'
-  id-token: 'write'
+# permissions:
+#   contents: 'read'
+#   id-token: 'write'
 
 jobs:
   build:
@@ -18,6 +18,8 @@ jobs:
         --privileged
         -v /runner/.docker/config.json:/github/home/.docker/config.json
         -v /runner/_work:/srv
+    outputs:
+      imageAndTag: ${{ steps.id.outputs.imageAndTag }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -75,7 +77,55 @@ jobs:
         run: |
           cosa upload-oscontainer --name "default-route-openshift-image-registry.apps.ocp.nsyd.tech/github-runners/okd-os" --add-directory /overlay
 
+      - name: Output Build ID
+        id: id
+        working-directory: /srv
+        run: |
+          # https://github.com/coreos/coreos-assembler/blob/e02480568ba41280fc1d104dbb2c3143fda1f8da/src/cmd-upload-oscontainer#L38
+          ID=$(cat builds/builds.json | jq -r '.builds[0].id')
+          IMAGE_AND_TAG="default-route-openshift-image-registry.apps.ocp.nsyd.tech/github-runners/okd-os:$ID"
+          echo $IMAGE_AND_TAG
+          echo '::set-output name=imageAndTag::$IMAGE_AND_TAG'
+
       - name: Wait on Fail
         if: ${{ failure() }}
         shell: bash
         run: sleep infinity
+
+  bundle:
+    runs-on:
+      - self-hosted
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login OKD
+        run: |
+          cat /var/run/secrets/kubernetes.io/serviceaccount/token  | docker login -u some --password-stdin default-route-openshift-image-registry.apps.ocp.nsyd.tech
+
+      - name: Set up Docker Context for Buildx
+        run: |
+          docker context create builders
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          version: latest
+          endpoint: builders
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: default-route-openshift-image-registry.apps.ocp.nsyd.tech/github-runners/okd-machine-os
+          tags: |
+            type=sha,enable=true,priority=100,format=short
+
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: Dockerfile.template
+          push: true
+          args: INITIAL_IMAGE=${{ needs.build.outputs.imageAndTag }}
+          tags: ${{ steps.meta.outputs.tags }}

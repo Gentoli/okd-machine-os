@@ -127,5 +127,5 @@ jobs:
           context: .
           file: Dockerfile.template
           push: true
-          args: INITIAL_IMAGE=${{ needs.build.outputs.imageAndTag }}
+          build-args: INITIAL_IMAGE=${{ needs.build.outputs.imageAndTag }}
           tags: ${{ steps.meta.outputs.tags }}

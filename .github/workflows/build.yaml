@@ -85,7 +85,7 @@ jobs:
           ID=$(cat builds/builds.json | jq -r '.builds[0].id')
           IMAGE_AND_TAG="default-route-openshift-image-registry.apps.ocp.nsyd.tech/github-runners/okd-os:$ID"
           echo $IMAGE_AND_TAG
-          echo '::set-output name=imageAndTag::$IMAGE_AND_TAG'
+          echo "::set-output name=imageAndTag::$IMAGE_AND_TAG"
 
       - name: Wait on Fail
         if: ${{ failure() }}

@@ -115,6 +115,10 @@ jobs:
         run: |
           cat /var/run/secrets/kubernetes.io/serviceaccount/token  | docker login -u some --password-stdin default-route-openshift-image-registry.apps.ocp.nsyd.tech
 
+      - name: Login GCR
+        run: |
+          gcloud auth configure-docker
+  
       - name: Set up Docker Context for Buildx
         run: |
           docker context create builders

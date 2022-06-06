@@ -54,7 +54,7 @@ jobs:
 
           rsync -rv /resources/srv/* .
 
-          cosa init $GITHUB_WORKSPACE --force
+          cosa init $GITHUB_WORKSPACE --force --transient
 
           # Create repo for OKD RPMs
           pushd /srv/okd-repo

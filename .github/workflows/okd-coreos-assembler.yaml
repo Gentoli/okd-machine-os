@@ -4,9 +4,11 @@ on:
   workflow_dispatch: { }
   push:
     # replace
-    branches: gh-actions
+    branches:
+      - release-4.10
     paths:
       - '.github/workflows/okd-coreos-assembler.yaml'
+      - 'Dockerfile.cosa'
 
 permissions:
   contents: 'read'
@@ -48,4 +50,4 @@ jobs:
           context: .
           file: Dockerfile.cosa
           push: true
-          tags: default-route-openshift-image-registry.apps.ocp.nsyd.tech/github-runners/okd-coreos-assembler:latest
+          tags: default-route-openshift-image-registry.apps.ocp.nsyd.tech/github-runners/okd-coreos-assembler:4.10

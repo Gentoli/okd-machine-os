@@ -12,7 +12,7 @@ jobs:
     runs-on:
       - self-hosted
     container:
-      image: default-route-openshift-image-registry.apps.ocp.nsyd.tech/github-runners/okd-coreos-assembler:latest
+      image: default-route-openshift-image-registry.apps.ocp.nsyd.tech/github-runners/okd-coreos-assembler:4.10
       # privileged for kvm, expose runner's docker creds to podman, use _work for fsetxattr(security.selinux
       options: >-
         --privileged
@@ -43,18 +43,17 @@ jobs:
       #     ln -s "$(which docker-credential-gcloud)" /usr/local/bin/
 
       - shell: bash
-        run: |
-          rsync -rv /resources/src/* .
-
-      - shell: bash
         working-directory: /srv
         run: |
           set -exuo pipefail
           export COSA_SKIP_OVERLAY=1
 
+          cosa init $GITHUB_WORKSPACE --force --transient
+
           rsync -rv /resources/srv/* .
 
-          cosa init $GITHUB_WORKSPACE --force --transient
+          rsync -rv /resources/overrides .
+          cp -rvf $GITHUB_WORKSPACE/overlay.d ./overrides/rootfs/
 
           # Create repo for OKD RPMs
           pushd /srv/okd-repo

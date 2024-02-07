@@ -17,6 +17,6 @@ jobs:
         run: |
           pwd
           find .
-          ls ${{ github.workspace }}
+          ls ${{ github.workspace }} || sleep 200
       - run: echo "🍏 This job's status is ${{ job.status }}. ok2"
       - run: sleep 120
